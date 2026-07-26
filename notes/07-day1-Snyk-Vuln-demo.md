@@ -96,3 +96,22 @@ The first Snyk fix PR reduced the overall risk, but the dependency chain still c
 - Continue moving `requests` and `urllib3` to the safest versions supported by the package chain.
 
 After applying the second Snyk fix PR and retesting, the project dropped from 11 issues to 9 issues. The remaining findings are still fixable, but they now center on urllib3@2.0.7, requests@2.31.0, and idna@3.10, with Snyk recommending further upgrades such as urllib3@1.26.19, requests@2.32.2 or 2.32.4, and idna@3.15. This shows that Snyk’s automated fixes are incremental and compatibility-aware, so multiple remediation cycles may be needed before a dependency tree is fully clean.
+
+If you face this as a cybersecurity engineer, the right next step is to treat Snyk as a **decision-support tool**, not the final authority. Your job is to verify whether each upgrade is safe, test the app after changes, and decide whether to accept, delay, or replace the dependency. [github](https://github.com/snyk/user-docs/blob/main/docs/scan-with-snyk/snyk-open-source/manage-vulnerabilities/fix-your-vulnerabilities.md)
+
+## What to do next
+1. Read the vulnerability details and the suggested fixed versions. Snyk is telling you which upgrade paths are known to reduce the risk, but not every suggested version is always compatible with your app. [github](https://github.com/snyk/user-docs/blob/main/docs/scan-with-snyk/snyk-open-source/manage-vulnerabilities/fix-your-vulnerabilities.md)
+2. Check the dependency chain, especially direct vs transitive packages. If a transitive package is being pinned, confirm whether the direct package still supports it. [github](https://github.com/snyk/user-docs/blob/main/docs/scan-with-snyk/snyk-open-source/manage-vulnerabilities/fix-your-vulnerabilities.md)
+3. Run the app’s tests and any basic runtime checks after each fix PR. Snyk explicitly warns that upgrades can introduce breaking changes, so validation is part of the security work. [github](https://github.com/snyk/user-docs/blob/main/docs/implement-snyk/walkthrough-code-repository-projects/fix-your-first-vulnerability-deeper-dive.md)
+4. If a fix causes compatibility problems, document the risk, consider a temporary ignore with an expiration date, and plan a follow-up remediation cycle. [github](https://github.com/snyk/user-docs/blob/main/docs/implement-snyk/walkthrough-code-repository-projects/fix-your-first-vulnerability-deeper-dive.md)
+5. Re-scan after every meaningful change so you can prove whether risk went down. That turns the work into an auditable process instead of a one-off patch. [github](https://github.com/snyk/user-docs/blob/main/docs/scan-with-snyk/pull-requests/pull-request-checks/analyze-pr-checks-results.md)
+
+## How to think like an engineer
+Your goal is not just “make the alert disappear.” It is to reduce exposure while preserving application behavior, because a secure but broken app is still a failure. [github](https://github.com/snyk/user-docs/blob/main/docs/implement-snyk/walkthrough-code-repository-projects/fix-your-first-vulnerability-deeper-dive.md)
+In practice, that means you should compare the proposed version with your current runtime constraints, test the code path that uses the dependency, and only merge when the fix is both secure and functional. [github](https://github.com/snyk/user-docs/blob/main/docs/implement-snyk/walkthrough-code-repository-projects/fix-your-first-vulnerability-deeper-dive.md)
+
+## Good rule of thumb
+- Upgrade first if the fix is low-risk.
+- Test carefully if the upgrade spans major versions.
+- Temporarily defer only when you have a documented reason and a follow-up plan. [github](https://github.com/snyk/user-docs/blob/main/docs/implement-snyk/walkthrough-code-repository-projects/fix-your-first-vulnerability-deeper-dive.md)
+
