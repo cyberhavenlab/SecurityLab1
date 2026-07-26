@@ -7,6 +7,8 @@ Links:
 Decisions:
 Open questions:
 
+This inventory maps each source to the security questions it answers, the likely integration path, and the health checks needed to keep data flowing.
+
 | Source | Security questions it answers | Likely integration method | Key event types to capture | What you lose if it breaks | Health-check method |
 |---|---|---|---|---|---|
 | AWS / CloudTrail | Who changed IAM, created keys, launched resources, or disabled logging? | Native connector or API pull | IAM changes, ConsoleLogin, CreateAccessKey, StopLogging, policy changes | No visibility into cloud control plane activity | Alert if no new events arrive within a set time window |
@@ -21,7 +23,13 @@ Open questions:
    - My work is source setup, verification, normalization, tuning, and health monitoring. The SOC handles 24/7 monitoring, triage, and escalation.
 
 2. What is the difference between a false positive and a benign true positive, and why does it matter for metrics?
-   - A false positive is a bad alert. A benign true positive is real activity that was authorized. They affect alert tuning and reporting differently.
+   - A false positive is a bad alert. A benign true positive is real activity that was authorized. They must be tracked separately so metrics and tuning decisions stay accurate.
 
 3. How would I detect that a log source stopped sending data?
    - Use last-seen timestamps, ingestion-lag alerts, and a rule for no events within a defined time window.
+
+## Open questions
+
+- Which sources will have native connectors versus API-based ingestion?
+- What are the exact health thresholds for “silent source” alerts?
+- Which source is most important to validate first in a live environment?
